@@ -3,7 +3,7 @@
  * Plugin Name: 			Simple FAQ Manager
  * Plugin URI:  			https://github.com/edwinkrisnha/simple-faq-manager-wordpress-plugin
  * Description: 			Manage FAQs with categories, drag-and-drop widget ordering, shortcodes, and an Elementor widget.
- * Version:     			1.0.3
+ * Version:     			1.0.4
  * Author:            Edwin Krisnha
  * Author URI:        https://github.com/edwinkrisnha
  * License:           GPLv2 or later
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SFM_VERSION', '1.0.3' );
+define( 'SFM_VERSION', '1.0.4' );
 define( 'SFM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SFM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

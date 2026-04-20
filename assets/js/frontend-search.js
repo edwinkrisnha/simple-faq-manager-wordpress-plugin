@@ -147,7 +147,9 @@
 			return;
 		}
 
-		var activeCategory = 'all';
+		var $activeBtn     = $( '.sfm-cat-btn.active' ).first();
+
+		var activeCategory = $activeBtn.length ? String( $activeBtn.data( 'category' ) ) : 'all';
 
 		function applyFilters() {
 			var term       = $( '#sfm-search' ).val().toLowerCase().trim();
@@ -200,6 +202,11 @@
 			activeCategory = $( this ).data( 'category' );
 			applyFilters();
 		} );
+
+		// Apply initial category filter on load (handles hidden "All" button case).
+		if ( activeCategory !== 'all' ) {
+			applyFilters();
+		}
 
 	} );
 

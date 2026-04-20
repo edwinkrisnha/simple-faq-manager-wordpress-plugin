@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.4] — 2026-04-20
+
+### Fixed
+
+- **FAQ List › Category filter not applied on page load when "All" button is hidden** — `activeCategory` was hardcoded to `'all'` at init; it now reads the initially active `.sfm-cat-btn` from the DOM, and `applyFilters()` runs immediately on load when the active category is not `'all'`.
+
+---
+
 ## [1.0.3] — 2026-04-20
 
 ### Added
