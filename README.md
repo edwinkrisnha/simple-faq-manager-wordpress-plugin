@@ -93,6 +93,8 @@ https://your-site.com/?sfm_run_seed=1&sfm_seed_key=sfm_seed_2024
 | **Search Bar** | Show / Hide | Show |
 | **Category Filter** | Show / Hide | Show |
 | **Expand / Collapse All** | Show / Hide *(accordion only)* | Show |
+| **Exclusive Accordion** | On / Off *(accordion only)* | On |
+| **"All" Button** | Show / Hide | Show |
 | **Sort Order** | Title A→Z, Z→A, Newest, Oldest, Custom | Title A→Z |
 | **Open First Item** | On / Off | Off |
 | **Exclusive Accordion** | On / Off | On |

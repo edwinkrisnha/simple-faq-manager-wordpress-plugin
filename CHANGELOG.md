@@ -7,6 +7,19 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.3] — 2026-04-20
+
+### Added
+
+- **FAQ List › Exclusive Accordion** setting — when enabled (accordion mode only), opening one FAQ closes all others in the same group
+- **FAQ List › "All" Button** setting — show or hide the "All" reset button inside the category filter row; when hidden, the first category button receives the `active` class by default
+
+### Changed
+
+- `sfmSettings` JS object now includes `listExclusive` flag consumed by the list toggle handler
+
+---
+
 ## [1.0.2] — 2026-04-20
 
 ### Added

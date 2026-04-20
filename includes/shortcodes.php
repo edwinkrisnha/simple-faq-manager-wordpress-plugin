@@ -23,11 +23,12 @@ add_shortcode( 'faq_list', 'sfm_shortcode_faq_list' );
 function sfm_shortcode_faq_list( $atts ) {
 	shortcode_atts( array(), $atts, 'faq_list' );
 
-	$s            = sfm_get_settings();
-	$display_mode = $s['list_display_mode']; // 'expanded' | 'accordion'
-	$show_search  = '1' === $s['list_show_search'];
-	$show_filters = '1' === $s['list_show_cat_filter'];
-	$show_expand  = '1' === $s['list_show_expand_all'] && 'accordion' === $display_mode;
+	$s             = sfm_get_settings();
+	$display_mode  = $s['list_display_mode']; // 'expanded' | 'accordion'
+	$show_search   = '1' === $s['list_show_search'];
+	$show_filters  = '1' === $s['list_show_cat_filter'];
+	$show_all_btn  = '1' === $s['list_show_all_btn'];
+	$show_expand   = '1' === $s['list_show_expand_all'] && 'accordion' === $display_mode;
 	$enable_schema = '1' === $s['enable_schema'];
 
 	$categories = get_terms(
@@ -100,11 +101,13 @@ function sfm_shortcode_faq_list( $atts ) {
 
 		<?php if ( $show_filters && ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
 		<div class="sfm-category-filters" role="group" aria-label="<?php esc_attr_e( 'Filter by category', 'simple-faq-manager' ); ?>">
+			<?php if ( $show_all_btn ) : ?>
 			<button class="sfm-cat-btn active" data-category="all">
 				<?php esc_html_e( 'All', 'simple-faq-manager' ); ?>
 			</button>
+			<?php endif; ?>
 			<?php foreach ( $categories as $cat ) : ?>
-			<button class="sfm-cat-btn" data-category="<?php echo esc_attr( $cat->slug ); ?>">
+			<button class="sfm-cat-btn<?php echo $show_all_btn ? '' : ( $cat === reset( $categories ) ? ' active' : '' ); ?>" data-category="<?php echo esc_attr( $cat->slug ); ?>">
 				<?php echo esc_html( $cat->name ); ?>
 			</button>
 			<?php endforeach; ?>

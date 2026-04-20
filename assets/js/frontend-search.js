@@ -22,6 +22,7 @@
 	var settings = window.sfmSettings || {
 		listDisplayMode:   'expanded',
 		listShowExpandAll: true,
+		listExclusive:     true,
 		widgetOpenFirst:   false,
 		widgetExclusive:   true,
 		i18n: { expandAll: 'Expand All', collapseAll: 'Collapse All' },
@@ -71,12 +72,20 @@
 	$( document ).on( 'click', '.sfm-list-toggle', function () {
 		var $btn   = $( this );
 		var $item  = $btn.closest( '.sfm-faq-item' );
+		var $group = $btn.closest( '.sfm-faq-groups' );
 		var $body  = $item.find( '.sfm-faq-answer' );
 		var isOpen = $btn.attr( 'aria-expanded' ) === 'true';
 
 		if ( isOpen ) {
 			closeAccordionItem( $btn, $body );
 		} else {
+			// Exclusive list accordion: close all other open items first.
+			if ( settings.listExclusive ) {
+				$group.find( '.sfm-list-toggle[aria-expanded="true"]' ).each( function () {
+					var $other = $( this );
+					closeAccordionItem( $other, $other.closest( '.sfm-faq-item' ).find( '.sfm-faq-answer' ) );
+				} );
+			}
 			openAccordionItem( $btn, $body );
 		}
 

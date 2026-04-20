@@ -1,19 +1,24 @@
 <?php
 /**
- * Plugin Name: Simple FAQ Manager
- * Plugin URI:  https://github.com/example/simple-faq-manager
- * Description: Manage FAQs with categories, drag-and-drop widget ordering, shortcodes, and an Elementor widget.
- * Version:     1.0.2
- * Author:      Simple FAQ Manager
- * License:     GPL-2.0+
- * Text Domain: simple-faq-manager
+ * Plugin Name: 			Simple FAQ Manager
+ * Plugin URI:  			https://github.com/edwinkrisnha/simple-faq-manager-wordpress-plugin
+ * Description: 			Manage FAQs with categories, drag-and-drop widget ordering, shortcodes, and an Elementor widget.
+ * Version:     			1.0.3
+ * Author:            Edwin Krisnha
+ * Author URI:        https://github.com/edwinkrisnha
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: 			simple-faq-manager
+ * Requires at least: 5.6
+ * Requires PHP:      7.4
+ * Tested up to:      6.7
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SFM_VERSION', '1.0.2' );
+define( 'SFM_VERSION', '1.0.3' );
 define( 'SFM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SFM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -183,6 +188,7 @@ function sfm_register_frontend_assets() {
 		array(
 			'listDisplayMode'   => $s['list_display_mode'],
 			'listShowExpandAll' => '1' === $s['list_show_expand_all'],
+			'listExclusive'     => '1' === $s['list_exclusive'],
 			'widgetOpenFirst'   => '1' === $s['widget_open_first'],
 			'widgetExclusive'   => '1' === $s['widget_exclusive'],
 			'i18n'              => array(

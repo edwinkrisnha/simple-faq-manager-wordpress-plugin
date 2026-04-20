@@ -20,7 +20,9 @@ function sfm_default_settings() {
 		'list_display_mode'    => 'expanded',  // 'expanded' | 'accordion'
 		'list_show_search'     => '1',
 		'list_show_cat_filter' => '1',
+		'list_show_all_btn'    => '1',         // show "All" button inside category filter row
 		'list_show_expand_all' => '1',         // expand/collapse all btn (accordion mode only)
+		'list_exclusive'       => '1',         // close sibling items when one opens (accordion mode)
 		'list_sort'            => 'title_asc', // title_asc|title_desc|date_desc|date_asc|menu_order
 		// [faq_widget] & Elementor widget
 		'widget_open_first'    => '0',
@@ -75,7 +77,9 @@ function sfm_register_settings() {
 	add_settings_field( 'sfm_list_display_mode',    __( 'Display Mode', 'simple-faq-manager' ),            'sfm_field_list_display_mode',    'sfm-settings', 'sfm_section_list' );
 	add_settings_field( 'sfm_list_show_search',     __( 'Search Bar', 'simple-faq-manager' ),              'sfm_field_list_show_search',     'sfm-settings', 'sfm_section_list' );
 	add_settings_field( 'sfm_list_show_cat_filter', __( 'Category Filter', 'simple-faq-manager' ),         'sfm_field_list_show_cat_filter', 'sfm-settings', 'sfm_section_list' );
+	add_settings_field( 'sfm_list_show_all_btn',    __( '"All" Button', 'simple-faq-manager' ),            'sfm_field_list_show_all_btn',    'sfm-settings', 'sfm_section_list' );
 	add_settings_field( 'sfm_list_show_expand_all', __( 'Expand / Collapse All', 'simple-faq-manager' ),   'sfm_field_list_show_expand_all', 'sfm-settings', 'sfm_section_list' );
+	add_settings_field( 'sfm_list_exclusive',       __( 'Exclusive Accordion', 'simple-faq-manager' ),     'sfm_field_list_exclusive',       'sfm-settings', 'sfm_section_list' );
 	add_settings_field( 'sfm_list_sort',            __( 'Sort Order', 'simple-faq-manager' ),              'sfm_field_list_sort',            'sfm-settings', 'sfm_section_list' );
 
 	// --- Section: FAQ Widget ---
@@ -143,6 +147,28 @@ function sfm_field_list_show_cat_filter() {
 		<input type="checkbox" name="sfm_settings[list_show_cat_filter]" value="1" <?php checked( $s['list_show_cat_filter'], '1' ); ?>>
 		<?php esc_html_e( 'Show category filter buttons above the FAQ list', 'simple-faq-manager' ); ?>
 	</label>
+	<?php
+}
+
+function sfm_field_list_show_all_btn() {
+	$s = sfm_get_settings();
+	?>
+	<label>
+		<input type="checkbox" name="sfm_settings[list_show_all_btn]" value="1" <?php checked( $s['list_show_all_btn'], '1' ); ?>>
+		<?php esc_html_e( 'Show the "All" button that resets the category filter', 'simple-faq-manager' ); ?>
+	</label>
+	<p class="description"><?php esc_html_e( 'Only relevant when Category Filter is enabled.', 'simple-faq-manager' ); ?></p>
+	<?php
+}
+
+function sfm_field_list_exclusive() {
+	$s = sfm_get_settings();
+	?>
+	<label>
+		<input type="checkbox" name="sfm_settings[list_exclusive]" value="1" <?php checked( $s['list_exclusive'], '1' ); ?>>
+		<?php esc_html_e( 'Only one answer open at a time — closes others when a new one is opened', 'simple-faq-manager' ); ?>
+	</label>
+	<p class="description"><?php esc_html_e( 'Only applies in Accordion mode.', 'simple-faq-manager' ); ?></p>
 	<?php
 }
 
@@ -224,7 +250,9 @@ function sfm_sanitize_settings( $input ) {
 
 	$clean['list_show_search']     = empty( $input['list_show_search'] )     ? '0' : '1';
 	$clean['list_show_cat_filter'] = empty( $input['list_show_cat_filter'] ) ? '0' : '1';
+	$clean['list_show_all_btn']    = empty( $input['list_show_all_btn'] )    ? '0' : '1';
 	$clean['list_show_expand_all'] = empty( $input['list_show_expand_all'] ) ? '0' : '1';
+	$clean['list_exclusive']       = empty( $input['list_exclusive'] )       ? '0' : '1';
 
 	$valid_sorts        = array( 'title_asc', 'title_desc', 'date_desc', 'date_asc', 'menu_order' );
 	$clean['list_sort'] = in_array( $input['list_sort'] ?? '', $valid_sorts, true )
