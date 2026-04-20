@@ -160,7 +160,7 @@
 				var groupCat  = $group.data( 'category' );
 				var groupHas  = false;
 
-				if ( activeCategory !== 'all' && groupCat !== activeCategory ) {
+				if ( ! term && activeCategory !== 'all' && groupCat !== activeCategory ) {
 					$group.addClass( 'sfm-hidden' );
 					return;
 				}
