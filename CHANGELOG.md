@@ -7,11 +7,16 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
-## [Unreleased]
+## [1.0.1] — 2026-04-20
+
+### Fixed
+
+- `[faq_list]` and `[faq_widget]` shortcodes now render FAQ answers with `wpautop()` + `wptexturize()` instead of `apply_filters('the_content', ...)`. Calling the full `the_content` filter chain from inside a shortcode callback caused two bugs: duplicate shortcode output on the page, and nested shortcode execution (e.g. `[faq_widget]` rendering inside an FAQ answer instead of the actual answer text).
 
 ### Added
 
-- `data/seed-faqs.php` — one-time data seeder that imports the Kyrim FAQ dataset (9 categories, ~130 FAQs in Indonesian) via WP-CLI or a guarded browser request; idempotent (skips existing titles)
+- `sfm_render_faq_content()` helper in `shortcodes.php` — safe content renderer used by both shortcodes and the Elementor widget.
+- `data/seed-faqs.php` — one-time data seeder that imports the Kyrim FAQ dataset (9 categories, ~130 FAQs in Indonesian) via WP-CLI or a guarded browser request; idempotent (skips existing titles).
 
 ---
 

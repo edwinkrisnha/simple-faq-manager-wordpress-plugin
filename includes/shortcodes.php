@@ -4,6 +4,11 @@
  *
  * [faq_list]   – All FAQs grouped by category with live search and category filter.
  * [faq_widget] – Widget-enabled FAQs as an accessible accordion.
+ *
+ * NOTE: FAQ answer content is rendered with sfm_render_faq_content() instead of
+ * apply_filters('the_content', ...) to avoid re-triggering the_content hooks from
+ * inside a shortcode callback, which causes duplicate output and nested shortcode
+ * execution (e.g. [faq_widget] rendering inside [faq_list] answers).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -90,7 +95,7 @@ function sfm_shortcode_faq_list( $atts ) {
 				<div class="sfm-faq-item">
 					<h3 class="sfm-faq-question"><?php echo esc_html( $faq->post_title ); ?></h3>
 					<div class="sfm-faq-answer">
-						<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
+						<?php echo sfm_render_faq_content( $faq->post_content ); ?>
 					</div>
 				</div>
 				<?php endforeach; ?>
@@ -104,7 +109,7 @@ function sfm_shortcode_faq_list( $atts ) {
 				<div class="sfm-faq-item">
 					<h3 class="sfm-faq-question"><?php echo esc_html( $faq->post_title ); ?></h3>
 					<div class="sfm-faq-answer">
-						<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
+						<?php echo sfm_render_faq_content( $faq->post_content ); ?>
 					</div>
 				</div>
 				<?php endforeach; ?>
@@ -155,6 +160,21 @@ function sfm_shortcode_faq_widget( $atts ) {
 }
 
 // ---------------------------------------------------------------------------
+// Safe FAQ content renderer
+// ---------------------------------------------------------------------------
+
+/**
+ * Render FAQ post_content safely inside shortcode callbacks.
+ *
+ * Uses wpautop + wptexturize instead of apply_filters('the_content', ...)
+ * to avoid re-triggering the_content hooks (which causes duplicate shortcode
+ * output and nested shortcode execution when called from within a shortcode).
+ */
+function sfm_render_faq_content( $content ) {
+	return wp_kses_post( wpautop( wptexturize( $content ) ) );
+}
+
+// ---------------------------------------------------------------------------
 // Shared accordion renderer (used by shortcode and Elementor widget)
 // ---------------------------------------------------------------------------
 
@@ -170,7 +190,7 @@ function sfm_render_accordion( array $faqs ) {
 					<span class="sfm-accordion-icon" aria-hidden="true">+</span>
 				</button>
 				<div class="sfm-accordion-body" hidden>
-					<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
+					<?php echo sfm_render_faq_content( $faq->post_content ); ?>
 				</div>
 			</div>
 			<?php endforeach; ?>

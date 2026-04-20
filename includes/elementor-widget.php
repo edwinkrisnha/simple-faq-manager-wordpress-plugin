@@ -155,7 +155,7 @@ class SFM_Elementor_Widget extends \Elementor\Widget_Base {
 			return;
 		}
 
-		// sfm_render_accordion() is defined in shortcodes.php (already loaded).
+		// sfm_render_accordion() and sfm_render_faq_content() are defined in shortcodes.php (already loaded).
 		echo sfm_render_accordion( $faqs ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 

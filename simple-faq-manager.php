@@ -3,7 +3,7 @@
  * Plugin Name: Simple FAQ Manager
  * Plugin URI:  https://github.com/example/simple-faq-manager
  * Description: Manage FAQs with categories, drag-and-drop widget ordering, shortcodes, and an Elementor widget.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Simple FAQ Manager
  * License:     GPL-2.0+
  * Text Domain: simple-faq-manager
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SFM_VERSION', '1.0.0' );
+define( 'SFM_VERSION', '1.0.1' );
 define( 'SFM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SFM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
