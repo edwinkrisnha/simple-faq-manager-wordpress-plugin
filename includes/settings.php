@@ -29,6 +29,11 @@ function sfm_default_settings() {
 		'widget_exclusive'     => '1',         // close sibling items when one opens
 		// SEO
 		'enable_schema'        => '1',         // output JSON-LD FAQPage schema
+		// Colors
+		'color_accent'         => '#2271b1',
+		'color_question_text'  => '#1d2327',
+		'color_answer_text'    => '#444444',
+		'color_item_bg'        => '#f9f9f9',
 	);
 }
 
@@ -106,6 +111,21 @@ function sfm_register_settings() {
 	);
 
 	add_settings_field( 'sfm_enable_schema', __( 'FAQ Schema Markup', 'simple-faq-manager' ), 'sfm_field_enable_schema', 'sfm-settings', 'sfm_section_seo' );
+
+	// --- Section: Colors ---
+	add_settings_section(
+		'sfm_section_colors',
+		__( 'Colors', 'simple-faq-manager' ),
+		function () {
+			echo '<p class="description">' . esc_html__( 'Customize the FAQ color scheme to match your brand. Typography follows your theme / Elementor settings.', 'simple-faq-manager' ) . '</p>';
+		},
+		'sfm-settings'
+	);
+
+	add_settings_field( 'sfm_color_accent',        __( 'Accent Color', 'simple-faq-manager' ),       'sfm_field_color_accent',        'sfm-settings', 'sfm_section_colors' );
+	add_settings_field( 'sfm_color_question_text', __( 'Question Text Color', 'simple-faq-manager' ), 'sfm_field_color_question_text', 'sfm-settings', 'sfm_section_colors' );
+	add_settings_field( 'sfm_color_answer_text',   __( 'Answer Text Color', 'simple-faq-manager' ),   'sfm_field_color_answer_text',   'sfm-settings', 'sfm_section_colors' );
+	add_settings_field( 'sfm_color_item_bg',       __( 'Item Background', 'simple-faq-manager' ),     'sfm_field_color_item_bg',       'sfm-settings', 'sfm_section_colors' );
 }
 
 // ---------------------------------------------------------------------------
@@ -236,6 +256,38 @@ function sfm_field_enable_schema() {
 	<?php
 }
 
+function sfm_field_color_accent() {
+	$s = sfm_get_settings();
+	?>
+	<input type="color" name="sfm_settings[color_accent]" value="<?php echo esc_attr( $s['color_accent'] ); ?>">
+	<p class="description"><?php esc_html_e( 'Used for active buttons, border accents, focus rings, and hover states.', 'simple-faq-manager' ); ?></p>
+	<?php
+}
+
+function sfm_field_color_question_text() {
+	$s = sfm_get_settings();
+	?>
+	<input type="color" name="sfm_settings[color_question_text]" value="<?php echo esc_attr( $s['color_question_text'] ); ?>">
+	<p class="description"><?php esc_html_e( 'Color of FAQ question headings and category titles.', 'simple-faq-manager' ); ?></p>
+	<?php
+}
+
+function sfm_field_color_answer_text() {
+	$s = sfm_get_settings();
+	?>
+	<input type="color" name="sfm_settings[color_answer_text]" value="<?php echo esc_attr( $s['color_answer_text'] ); ?>">
+	<p class="description"><?php esc_html_e( 'Color of FAQ answer body text.', 'simple-faq-manager' ); ?></p>
+	<?php
+}
+
+function sfm_field_color_item_bg() {
+	$s = sfm_get_settings();
+	?>
+	<input type="color" name="sfm_settings[color_item_bg]" value="<?php echo esc_attr( $s['color_item_bg'] ); ?>">
+	<p class="description"><?php esc_html_e( 'Background of FAQ item cards and accordion toggle buttons.', 'simple-faq-manager' ); ?></p>
+	<?php
+}
+
 // ---------------------------------------------------------------------------
 // Sanitize
 // ---------------------------------------------------------------------------
@@ -262,6 +314,12 @@ function sfm_sanitize_settings( $input ) {
 	$clean['widget_open_first'] = empty( $input['widget_open_first'] ) ? '0' : '1';
 	$clean['widget_exclusive']  = empty( $input['widget_exclusive'] )  ? '0' : '1';
 	$clean['enable_schema']     = empty( $input['enable_schema'] )     ? '0' : '1';
+
+	$color_keys = array( 'color_accent', 'color_question_text', 'color_answer_text', 'color_item_bg' );
+	foreach ( $color_keys as $key ) {
+		$val          = sanitize_hex_color( $input[ $key ] ?? '' );
+		$clean[ $key ] = $val ?: $defaults[ $key ];
+	}
 
 	return $clean;
 }

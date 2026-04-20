@@ -7,6 +7,21 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.6] — 2026-04-20
+
+### Added
+
+- **FAQs > Settings › Colors** section — four color pickers to match the FAQ to your brand:
+  - *Accent Color* — borders, active buttons, focus rings, hover states (dark shade and light tint computed automatically)
+  - *Question Text Color* — FAQ question headings and category titles
+  - *Answer Text Color* — FAQ answer body text
+  - *Item Background* — FAQ card / accordion toggle button background (answer background computed as a lighter tint)
+- `sfm_hex_tint()` / `sfm_hex_shade()` PHP helpers to derive the accent tint and shade from the saved hex value
+- Inline CSS via `wp_add_inline_style` overwrites the `:root` CSS custom properties defined in `frontend.css`
+- `frontend.css` refactored to use CSS custom properties (`--sfm-accent`, `--sfm-accent-dark`, `--sfm-accent-bg`, `--sfm-question-text`, `--sfm-answer-text`, `--sfm-item-bg`, `--sfm-answer-bg`) — the file ships sensible defaults; the inline style overrides them with saved values
+
+---
+
 ## [1.0.5] — 2026-04-20
 
 ### Changed

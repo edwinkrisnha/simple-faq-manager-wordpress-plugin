@@ -3,7 +3,7 @@
  * Plugin Name: 			Simple FAQ Manager
  * Plugin URI:  			https://github.com/edwinkrisnha/simple-faq-manager-wordpress-plugin
  * Description: 			Manage FAQs with categories, drag-and-drop widget ordering, shortcodes, and an Elementor widget.
- * Version:     			1.0.5
+ * Version:     			1.0.6
  * Author:            Edwin Krisnha
  * Author URI:        https://github.com/edwinkrisnha
  * License:           GPLv2 or later
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SFM_VERSION', '1.0.5' );
+define( 'SFM_VERSION', '1.0.6' );
 define( 'SFM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SFM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
@@ -157,6 +157,60 @@ function sfm_save_meta_box( $post_id ) {
 
 	update_post_meta( $post_id, 'sfm_show_on_widget', isset( $_POST['sfm_show_on_widget'] ) );
 	update_post_meta( $post_id, 'sfm_widget_order', isset( $_POST['sfm_widget_order'] ) ? intval( $_POST['sfm_widget_order'] ) : 0 );
+}
+
+// ---------------------------------------------------------------------------
+// Color helpers
+// ---------------------------------------------------------------------------
+
+function sfm_hex_tint( $hex, $factor ) {
+	$hex = ltrim( $hex, '#' );
+	if ( 3 === strlen( $hex ) ) {
+		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+	}
+	list( $r, $g, $b ) = array_map( 'hexdec', str_split( $hex, 2 ) );
+	return sprintf(
+		'#%02x%02x%02x',
+		(int) round( $r + ( 255 - $r ) * $factor ),
+		(int) round( $g + ( 255 - $g ) * $factor ),
+		(int) round( $b + ( 255 - $b ) * $factor )
+	);
+}
+
+function sfm_hex_shade( $hex, $factor ) {
+	$hex = ltrim( $hex, '#' );
+	if ( 3 === strlen( $hex ) ) {
+		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+	}
+	list( $r, $g, $b ) = array_map( 'hexdec', str_split( $hex, 2 ) );
+	return sprintf(
+		'#%02x%02x%02x',
+		(int) round( $r * ( 1 - $factor ) ),
+		(int) round( $g * ( 1 - $factor ) ),
+		(int) round( $b * ( 1 - $factor ) )
+	);
+}
+
+// Outputs CSS custom properties derived from saved color settings.
+add_action( 'wp_enqueue_scripts', 'sfm_output_color_css', 20 );
+function sfm_output_color_css() {
+	$s      = sfm_get_settings();
+	$accent = $s['color_accent']        ?: '#2271b1';
+	$q_text = $s['color_question_text'] ?: '#1d2327';
+	$a_text = $s['color_answer_text']   ?: '#444444';
+	$item   = $s['color_item_bg']       ?: '#f9f9f9';
+
+	$css = ':root{'
+		. '--sfm-accent:'        . esc_attr( $accent )                         . ';'
+		. '--sfm-accent-dark:'   . esc_attr( sfm_hex_shade( $accent, 0.20 ) )  . ';'
+		. '--sfm-accent-bg:'     . esc_attr( sfm_hex_tint( $accent, 0.92 ) )   . ';'
+		. '--sfm-question-text:' . esc_attr( $q_text )                         . ';'
+		. '--sfm-answer-text:'   . esc_attr( $a_text )                         . ';'
+		. '--sfm-item-bg:'       . esc_attr( $item )                           . ';'
+		. '--sfm-answer-bg:'     . esc_attr( sfm_hex_tint( $item, 0.40 ) )     . ';'
+		. '}';
+
+	wp_add_inline_style( 'sfm-frontend', $css );
 }
 
 // ---------------------------------------------------------------------------
