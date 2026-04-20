@@ -93,6 +93,10 @@ function sfm_shortcode_faq_list( $atts ) {
 
 		<?php if ( $show_search ) : ?>
 		<div class="sfm-search-wrap">
+			<svg class="sfm-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+				<circle cx="11" cy="11" r="8"/>
+				<path stroke-linecap="round" d="m21 21-4.35-4.35"/>
+			</svg>
 			<input type="text" id="sfm-search" class="sfm-search-input"
 				placeholder="<?php esc_attr_e( 'Search FAQs…', 'simple-faq-manager' ); ?>"
 				aria-label="<?php esc_attr_e( 'Search FAQs', 'simple-faq-manager' ); ?>">
