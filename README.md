@@ -56,10 +56,28 @@ simple-faq-manager/
 │   └── js/
 │       ├── admin-sortable.js    # jQuery UI Sortable + AJAX toggle
 │       └── frontend-search.js  # Accordion + debounced search + category filter
+├── data/
+│   └── seed-faqs.php            # One-time data seeder (Kyrim FAQ content) — delete after use
 ├── readme.txt                   # WordPress plugin directory readme
 ├── README.md                    # This file
 └── CHANGELOG.md
 ```
+
+## Data Seeder
+
+`data/seed-faqs.php` imports the Kyrim FAQ dataset (9 categories, ~130 FAQs in Indonesian) into the database. Run it once, then delete the file.
+
+**Via WP-CLI:**
+```bash
+wp eval-file wp-content/plugins/simple-faq-manager/data/seed-faqs.php
+```
+
+**Via browser** (while logged in as admin):
+```
+https://your-site.com/?sfm_run_seed=1&sfm_seed_key=sfm_seed_2024
+```
+
+> Change `sfm_seed_2024` in the script to your own secret before running in the browser. The script is idempotent — safe to re-run, existing FAQs are skipped.
 
 ## Usage
 

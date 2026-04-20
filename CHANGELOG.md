@@ -7,6 +7,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- `data/seed-faqs.php` — one-time data seeder that imports the Kyrim FAQ dataset (9 categories, ~130 FAQs in Indonesian) via WP-CLI or a guarded browser request; idempotent (skips existing titles)
+
+---
+
 ## [1.0.0] — 2026-04-20
 
 ### Added
