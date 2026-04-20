@@ -88,6 +88,55 @@
 	transform: translateX(22px);
 }
 
+/* Toolbar: count summary + filter tabs */
+.sfm-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin: 16px 0 8px;
+}
+
+.sfm-count-summary {
+	font-size: 13px;
+	color: #50575e;
+}
+
+.sfm-filter-tabs {
+	display: flex;
+	gap: 4px;
+}
+
+.sfm-filter-btn {
+	padding: 4px 12px;
+	font-size: 13px;
+	border: 1px solid #c3c4c7;
+	border-radius: 3px;
+	background: #fff;
+	cursor: pointer;
+	color: #2c3338;
+	line-height: 1.6;
+}
+
+.sfm-filter-btn:hover {
+	background: #f0f0f1;
+}
+
+.sfm-filter-btn.active {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: #fff;
+}
+
+/* Row states */
+.sfm-row-off td {
+	opacity: 0.45;
+}
+
+.sfm-row-off td:last-child,
+.sfm-row-off td:nth-last-child(2) {
+	opacity: 1;
+}
+
 /* Save/error notice bar */
 .sfm-save-notice {
 	padding: 10px 16px;

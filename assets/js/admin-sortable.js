@@ -81,9 +81,10 @@
 			function ( response ) {
 				$checkbox.prop( 'disabled', false );
 				if ( response.success ) {
+					sfm_updateRowState( $checkbox.closest( '.sfm-faq-row' ), value === '1' );
+					sfm_updateCountSummary();
 					showNotice( sfmAdmin.i18n.toggleSaved, 'success' );
 				} else {
-					// Revert the checkbox on failure.
 					$checkbox.prop( 'checked', value !== '1' );
 					showNotice( sfmAdmin.i18n.toggleFailed, 'error' );
 				}
@@ -93,5 +94,45 @@
 			showNotice( sfmAdmin.i18n.toggleFailed, 'error' );
 		} );
 	} );
+
+	// -------------------------------------------------------------------------
+	// Row state helpers
+	// -------------------------------------------------------------------------
+
+	function sfm_updateRowState( $row, isOn ) {
+		$row
+			.toggleClass( 'sfm-row-on', isOn )
+			.toggleClass( 'sfm-row-off', ! isOn )
+			.attr( 'data-widget', isOn ? '1' : '0' );
+	}
+
+	function sfm_updateCountSummary() {
+		var total  = $( '.sfm-faq-row' ).length;
+		var active = $( '.sfm-faq-row.sfm-row-on' ).length;
+		$( '.sfm-count-summary' ).text( active + ' of ' + total + ' FAQs shown on widget' );
+	}
+
+	// -------------------------------------------------------------------------
+	// Filter tabs: All / On Widget / Off Widget
+	// -------------------------------------------------------------------------
+
+	var currentFilter = 'all';
+
+	$( document ).on( 'click', '.sfm-filter-btn', function () {
+		currentFilter = $( this ).data( 'filter' );
+		$( '.sfm-filter-btn' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
+		sfm_applyFilter();
+	} );
+
+	function sfm_applyFilter() {
+		$( '.sfm-faq-row' ).each( function () {
+			var isOn    = $( this ).data( 'widget' ) === 1 || $( this ).data( 'widget' ) === '1';
+			var visible = currentFilter === 'all'
+				|| ( currentFilter === 'on' && isOn )
+				|| ( currentFilter === 'off' && ! isOn );
+			$( this ).toggle( visible );
+		} );
+	}
 
 } )( jQuery );

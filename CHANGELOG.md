@@ -7,6 +7,17 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.5] — 2026-04-20
+
+### Changed
+
+- **Widget FAQs admin page** — redesigned for at-a-glance status:
+  - Summary count ("X of Y FAQs shown on widget") above the table, updates live after each toggle
+  - Off-widget rows visually dimmed (reduced opacity), toggle and edit controls remain fully visible
+  - Filter tabs — **All / On Widget / Off Widget** — instantly hide/show rows without a page reload; the active tab is highlighted
+
+---
+
 ## [1.0.4] — 2026-04-20
 
 ### Fixed

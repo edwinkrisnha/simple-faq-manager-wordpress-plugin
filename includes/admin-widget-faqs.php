@@ -52,7 +52,31 @@ function sfm_render_widget_faqs_page() {
 
 		<?php if ( empty( $faqs ) ) : ?>
 			<p><?php esc_html_e( 'No published FAQs found. Create some under FAQs > Add New.', 'simple-faq-manager' ); ?></p>
-		<?php else : ?>
+		<?php else :
+			$total_count  = count( $faqs );
+			$active_count = count( array_filter( $faqs, function( $f ) {
+				return (bool) get_post_meta( $f->ID, 'sfm_show_on_widget', true );
+			} ) );
+		?>
+		<div class="sfm-toolbar">
+			<span class="sfm-count-summary">
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: 1: active count, 2: total count */
+						__( '%1$d of %2$d FAQs shown on widget', 'simple-faq-manager' ),
+						$active_count,
+						$total_count
+					)
+				);
+				?>
+			</span>
+			<span class="sfm-filter-tabs">
+				<button class="sfm-filter-btn active" data-filter="all"><?php esc_html_e( 'All', 'simple-faq-manager' ); ?></button>
+				<button class="sfm-filter-btn" data-filter="on"><?php esc_html_e( 'On Widget', 'simple-faq-manager' ); ?></button>
+				<button class="sfm-filter-btn" data-filter="off"><?php esc_html_e( 'Off Widget', 'simple-faq-manager' ); ?></button>
+			</span>
+		</div>
 		<table class="wp-list-table widefat fixed striped sfm-faq-table">
 			<thead>
 				<tr>
@@ -68,8 +92,9 @@ function sfm_render_widget_faqs_page() {
 					$show_on_widget = (bool) get_post_meta( $faq->ID, 'sfm_show_on_widget', true );
 					$terms          = get_the_terms( $faq->ID, 'faq_category' );
 					$cat_names      = ( $terms && ! is_wp_error( $terms ) ) ? implode( ', ', wp_list_pluck( $terms, 'name' ) ) : '—';
+					$row_class      = $show_on_widget ? 'sfm-faq-row sfm-row-on' : 'sfm-faq-row sfm-row-off';
 				?>
-				<tr class="sfm-faq-row" data-id="<?php echo esc_attr( $faq->ID ); ?>">
+				<tr class="<?php echo esc_attr( $row_class ); ?>" data-id="<?php echo esc_attr( $faq->ID ); ?>" data-widget="<?php echo $show_on_widget ? '1' : '0'; ?>">
 					<td class="sfm-drag-handle"><span class="dashicons dashicons-move"></span></td>
 					<td><?php echo esc_html( $faq->post_title ); ?></td>
 					<td><?php echo esc_html( $cat_names ); ?></td>
