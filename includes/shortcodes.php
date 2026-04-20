@@ -23,6 +23,13 @@ add_shortcode( 'faq_list', 'sfm_shortcode_faq_list' );
 function sfm_shortcode_faq_list( $atts ) {
 	shortcode_atts( array(), $atts, 'faq_list' );
 
+	$s            = sfm_get_settings();
+	$display_mode = $s['list_display_mode']; // 'expanded' | 'accordion'
+	$show_search  = '1' === $s['list_show_search'];
+	$show_filters = '1' === $s['list_show_cat_filter'];
+	$show_expand  = '1' === $s['list_show_expand_all'] && 'accordion' === $display_mode;
+	$enable_schema = '1' === $s['enable_schema'];
+
 	$categories = get_terms(
 		array(
 			'taxonomy'   => 'faq_category',
@@ -30,13 +37,16 @@ function sfm_shortcode_faq_list( $atts ) {
 		)
 	);
 
+	$sort_args = sfm_sort_args( $s['list_sort'] );
+
 	$faqs = get_posts(
-		array(
-			'post_type'      => 'faq',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'orderby'        => 'title',
-			'order'          => 'ASC',
+		array_merge(
+			array(
+				'post_type'      => 'faq',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+			),
+			$sort_args
 		)
 	);
 
@@ -44,8 +54,8 @@ function sfm_shortcode_faq_list( $atts ) {
 		return '<p class="sfm-no-faqs">' . esc_html__( 'No FAQs found.', 'simple-faq-manager' ) . '</p>';
 	}
 
-	// Group FAQs by their first category; uncategorized FAQs go to a fallback bucket.
-	$grouped       = array(); // term_id => WP_Post[]
+	// Group FAQs by category; uncategorized go to fallback bucket.
+	$grouped       = array();
 	$uncategorized = array();
 
 	foreach ( $faqs as $faq ) {
@@ -59,17 +69,36 @@ function sfm_shortcode_faq_list( $atts ) {
 		}
 	}
 
+	// Build schema data (all FAQs flattened).
+	$schema_items = array();
+	if ( $enable_schema ) {
+		foreach ( $faqs as $faq ) {
+			$schema_items[] = array(
+				'@type' => 'Question',
+				'name'  => wp_strip_all_tags( $faq->post_title ),
+				'acceptedAnswer' => array(
+					'@type' => 'Answer',
+					'text'  => wp_strip_all_tags( $faq->post_content ),
+				),
+			);
+		}
+	}
+
+	$wrap_class = 'sfm-faq-list-wrap sfm-mode-' . esc_attr( $display_mode );
+
 	ob_start();
 	?>
-	<div class="sfm-faq-list-wrap">
+	<div class="<?php echo esc_attr( $wrap_class ); ?>">
 
+		<?php if ( $show_search ) : ?>
 		<div class="sfm-search-wrap">
 			<input type="text" id="sfm-search" class="sfm-search-input"
 				placeholder="<?php esc_attr_e( 'Search FAQs…', 'simple-faq-manager' ); ?>"
 				aria-label="<?php esc_attr_e( 'Search FAQs', 'simple-faq-manager' ); ?>">
 		</div>
+		<?php endif; ?>
 
-		<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
+		<?php if ( $show_filters && ! empty( $categories ) && ! is_wp_error( $categories ) ) : ?>
 		<div class="sfm-category-filters" role="group" aria-label="<?php esc_attr_e( 'Filter by category', 'simple-faq-manager' ); ?>">
 			<button class="sfm-cat-btn active" data-category="all">
 				<?php esc_html_e( 'All', 'simple-faq-manager' ); ?>
@@ -82,7 +111,16 @@ function sfm_shortcode_faq_list( $atts ) {
 		</div>
 		<?php endif; ?>
 
+		<?php if ( $show_expand ) : ?>
+		<div class="sfm-expand-controls">
+			<button class="sfm-expand-all-btn" data-state="collapsed">
+				<?php esc_html_e( 'Expand All', 'simple-faq-manager' ); ?>
+			</button>
+		</div>
+		<?php endif; ?>
+
 		<div id="sfm-faq-groups" class="sfm-faq-groups">
+
 			<?php if ( ! empty( $categories ) && ! is_wp_error( $categories ) ) :
 				foreach ( $categories as $cat ) :
 					if ( empty( $grouped[ $cat->term_id ] ) ) {
@@ -92,12 +130,7 @@ function sfm_shortcode_faq_list( $atts ) {
 			<div class="sfm-faq-group" data-category="<?php echo esc_attr( $cat->slug ); ?>">
 				<h2 class="sfm-category-title"><?php echo esc_html( $cat->name ); ?></h2>
 				<?php foreach ( $grouped[ $cat->term_id ] as $faq ) : ?>
-				<div class="sfm-faq-item">
-					<h3 class="sfm-faq-question"><?php echo esc_html( $faq->post_title ); ?></h3>
-					<div class="sfm-faq-answer">
-						<?php echo sfm_render_faq_content( $faq->post_content ); ?>
-					</div>
-				</div>
+				<?php echo sfm_render_list_item( $faq, $display_mode ); ?>
 				<?php endforeach; ?>
 			</div>
 			<?php endforeach; endif; ?>
@@ -106,12 +139,7 @@ function sfm_shortcode_faq_list( $atts ) {
 			<div class="sfm-faq-group" data-category="uncategorized">
 				<h2 class="sfm-category-title"><?php esc_html_e( 'Uncategorized', 'simple-faq-manager' ); ?></h2>
 				<?php foreach ( $uncategorized as $faq ) : ?>
-				<div class="sfm-faq-item">
-					<h3 class="sfm-faq-question"><?php echo esc_html( $faq->post_title ); ?></h3>
-					<div class="sfm-faq-answer">
-						<?php echo sfm_render_faq_content( $faq->post_content ); ?>
-					</div>
-				</div>
+				<?php echo sfm_render_list_item( $faq, $display_mode ); ?>
 				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
@@ -119,9 +147,17 @@ function sfm_shortcode_faq_list( $atts ) {
 			<p class="sfm-no-results" style="display:none;" aria-live="polite">
 				<?php esc_html_e( 'No FAQs match your search.', 'simple-faq-manager' ); ?>
 			</p>
-		</div>
 
-	</div>
+		</div><!-- .sfm-faq-groups -->
+
+	</div><!-- .sfm-faq-list-wrap -->
+
+	<?php if ( $enable_schema && ! empty( $schema_items ) ) : ?>
+	<script type="application/ld+json">
+	<?php echo wp_json_encode( array( '@context' => 'https://schema.org', '@type' => 'FAQPage', 'mainEntity' => $schema_items ), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ); ?>
+	</script>
+	<?php endif; ?>
+
 	<?php
 	return ob_get_clean();
 }
@@ -175,7 +211,42 @@ function sfm_render_faq_content( $content ) {
 }
 
 // ---------------------------------------------------------------------------
-// Shared accordion renderer (used by shortcode and Elementor widget)
+// List item renderer — outputs different HTML based on display mode
+// ---------------------------------------------------------------------------
+
+function sfm_render_list_item( WP_Post $faq, $display_mode ) {
+	ob_start();
+
+	if ( 'accordion' === $display_mode ) :
+		?>
+		<div class="sfm-faq-item sfm-list-item-accordion">
+			<h3 class="sfm-faq-question">
+				<button class="sfm-list-toggle" aria-expanded="false">
+					<span><?php echo esc_html( $faq->post_title ); ?></span>
+					<span class="sfm-list-icon" aria-hidden="true">+</span>
+				</button>
+			</h3>
+			<div class="sfm-faq-answer" hidden>
+				<?php echo sfm_render_faq_content( $faq->post_content ); ?>
+			</div>
+		</div>
+		<?php
+	else :
+		?>
+		<div class="sfm-faq-item">
+			<h3 class="sfm-faq-question"><?php echo esc_html( $faq->post_title ); ?></h3>
+			<div class="sfm-faq-answer">
+				<?php echo sfm_render_faq_content( $faq->post_content ); ?>
+			</div>
+		</div>
+		<?php
+	endif;
+
+	return ob_get_clean();
+}
+
+// ---------------------------------------------------------------------------
+// Shared accordion renderer (widget + Elementor widget)
 // ---------------------------------------------------------------------------
 
 function sfm_render_accordion( array $faqs ) {
@@ -198,4 +269,23 @@ function sfm_render_accordion( array $faqs ) {
 	</div>
 	<?php
 	return ob_get_clean();
+}
+
+// ---------------------------------------------------------------------------
+// Sort args helper
+// ---------------------------------------------------------------------------
+
+function sfm_sort_args( $sort ) {
+	switch ( $sort ) {
+		case 'title_desc':
+			return array( 'orderby' => 'title', 'order' => 'DESC' );
+		case 'date_desc':
+			return array( 'orderby' => 'date', 'order' => 'DESC' );
+		case 'date_asc':
+			return array( 'orderby' => 'date', 'order' => 'ASC' );
+		case 'menu_order':
+			return array( 'orderby' => 'menu_order', 'order' => 'ASC' );
+		default: // title_asc
+			return array( 'orderby' => 'title', 'order' => 'ASC' );
+	}
 }

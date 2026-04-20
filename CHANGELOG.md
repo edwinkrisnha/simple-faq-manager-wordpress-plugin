@@ -7,6 +7,29 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.2] — 2026-04-20
+
+### Added
+
+- **FAQs > Settings** page with three sections:
+  - *FAQ List* — display mode (All Expanded / Accordion), show/hide search bar, show/hide category filter buttons, show/hide "Expand All / Collapse All" button (accordion mode only), sort order (Title A→Z, Title Z→A, Newest, Oldest, Custom)
+  - *FAQ Widget* — open first item on load, exclusive accordion (close others when one opens)
+  - *SEO* — output JSON-LD `FAQPage` schema on `[faq_list]` pages for Google rich results
+- `includes/settings.php` — Settings API registration, field callbacks, sanitizer, `sfm_get_settings()` / `sfm_default_settings()` helpers
+- `sfm_render_list_item()` — outputs either expanded or accordion HTML for each FAQ item in `[faq_list]`
+- `sfm_sort_args()` — translates sort setting to `get_posts` orderby/order args
+- `sfmSettings` JS object localized via `wp_localize_script` — provides display mode, widget behaviour flags, and i18n strings to the frontend script
+- Accordion mode for `[faq_list]`: togglable answers with accessible `aria-expanded`, grouped inside a bordered card per category
+- "Expand All / Collapse All" button for `[faq_list]` accordion mode
+- Widget exclusive accordion and open-first-on-load behaviours in JS
+
+### Changed
+
+- `[faq_list]` now reads sort order, search bar, category filter, and display mode from settings instead of hard-coded defaults
+- `sfm_render_accordion()` accordion toggle now closes sibling items when `widgetExclusive` is enabled
+
+---
+
 ## [1.0.1] — 2026-04-20
 
 ### Fixed

@@ -7,9 +7,11 @@ A WordPress plugin for managing FAQs with categories, drag-and-drop widget order
 - **Custom Post Type** — FAQs with question (title) and answer (editor)
 - **Taxonomy** — Hierarchical FAQ Categories
 - **Widget FAQs admin page** — Toggle widget visibility and drag-and-drop reorder via AJAX
-- **`[faq_list]` shortcode** — All FAQs grouped by category with real-time search and category filter buttons
-- **`[faq_widget]` shortcode** — Widget-enabled FAQs as a CSS accordion
+- **Settings page** — Control display mode, search, filters, sort order, widget behaviour, and SEO schema
+- **`[faq_list]` shortcode** — All FAQs grouped by category with real-time search, category filters, configurable display mode (expanded / accordion), and optional Expand All / Collapse All button
+- **`[faq_widget]` shortcode** — Widget-enabled FAQs as a CSS accordion with configurable open-first and exclusive-accordion behaviours
 - **Elementor Widget** — Drag-and-drop into any Elementor page from the "FAQ" panel category
+- **FAQ JSON-LD schema** — Outputs `FAQPage` structured data for Google rich results (togglable)
 
 ## Requirements
 
@@ -56,6 +58,8 @@ simple-faq-manager/
 │   └── js/
 │       ├── admin-sortable.js    # jQuery UI Sortable + AJAX toggle
 │       └── frontend-search.js  # Accordion + debounced search + category filter
+├── includes/
+│   └── settings.php             # Settings page, sfm_get_settings(), sanitizer
 ├── data/
 │   └── seed-faqs.php            # One-time data seeder (Kyrim FAQ content) — delete after use
 ├── readme.txt                   # WordPress plugin directory readme
@@ -80,6 +84,19 @@ https://your-site.com/?sfm_run_seed=1&sfm_seed_key=sfm_seed_2024
 > Change `sfm_seed_2024` in the script to your own secret before running in the browser. The script is idempotent — safe to re-run, existing FAQs are skipped.
 
 ## Usage
+
+### Settings (FAQs > Settings)
+
+| Setting | Options | Default |
+|---|---|---|
+| **Display Mode** | All Expanded, Accordion | All Expanded |
+| **Search Bar** | Show / Hide | Show |
+| **Category Filter** | Show / Hide | Show |
+| **Expand / Collapse All** | Show / Hide *(accordion only)* | Show |
+| **Sort Order** | Title A→Z, Z→A, Newest, Oldest, Custom | Title A→Z |
+| **Open First Item** | On / Off | Off |
+| **Exclusive Accordion** | On / Off | On |
+| **FAQ Schema Markup** | On / Off | On |
 
 ### Admin: Widget FAQs
 

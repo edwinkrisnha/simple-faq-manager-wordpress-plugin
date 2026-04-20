@@ -75,6 +75,139 @@
 	color: #fff;
 }
 
+/* Expand / Collapse All button */
+.sfm-expand-controls {
+	margin-bottom: 16px;
+	text-align: right;
+}
+
+.sfm-expand-all-btn {
+	padding: 6px 16px;
+	font-size: 13px;
+	font-family: inherit;
+	border: 1px solid #2271b1;
+	border-radius: 4px;
+	background: transparent;
+	color: #2271b1;
+	cursor: pointer;
+	transition: background 0.2s, color 0.2s;
+	line-height: 1.5;
+}
+
+.sfm-expand-all-btn:hover {
+	background: #2271b1;
+	color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   [faq_list] accordion mode
+   -------------------------------------------------------------------------- */
+
+/* In accordion mode, answers start hidden — JS reveals them via [hidden] removal. */
+.sfm-mode-accordion .sfm-faq-item {
+	padding: 0;
+	background: transparent;
+	border-left: none;
+}
+
+/* The toggle button inside the h3 acts as the accordion trigger */
+.sfm-list-toggle {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 20px;
+	background: #f9f9f9;
+	border: none;
+	border-bottom: 1px solid #e8e8e8;
+	border-left: 4px solid transparent;
+	font-size: 16px;
+	font-weight: 600;
+	font-family: inherit;
+	text-align: left;
+	cursor: pointer;
+	color: #1d2327;
+	transition: background 0.2s, border-color 0.2s, color 0.2s;
+	line-height: 1.4;
+}
+
+.sfm-list-toggle:hover {
+	background: #eef5fc;
+	border-left-color: #2271b1;
+	color: #2271b1;
+}
+
+.sfm-list-toggle:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: -2px;
+}
+
+.sfm-list-toggle[aria-expanded="true"] {
+	background: #eef5fc;
+	border-left-color: #2271b1;
+	color: #1a5c99;
+}
+
+.sfm-list-icon {
+	flex-shrink: 0;
+	font-size: 22px;
+	font-weight: 300;
+	line-height: 1;
+	transition: transform 0.25s ease;
+}
+
+.sfm-list-toggle[aria-expanded="true"] .sfm-list-icon {
+	transform: rotate(45deg);
+}
+
+/* Answer panel in accordion mode */
+.sfm-mode-accordion .sfm-faq-item .sfm-faq-answer {
+	padding: 0 20px;
+	font-size: 15px;
+	line-height: 1.75;
+	color: #444;
+	background: #fafafa;
+	border-left: 4px solid #2271b1;
+	border-bottom: 1px solid #e8e8e8;
+	overflow: hidden;
+	max-height: 0;
+	transition: max-height 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
+}
+
+.sfm-mode-accordion .sfm-faq-item .sfm-faq-answer:not([hidden]) {
+	max-height: 2000px;
+	padding: 16px 20px 20px;
+}
+
+/* Remove margin in accordion mode — spacing comes from borders */
+.sfm-mode-accordion .sfm-faq-item {
+	margin-bottom: 0;
+}
+
+.sfm-mode-accordion .sfm-faq-group {
+	border: 1px solid #e8e8e8;
+	border-radius: 8px;
+	overflow: hidden;
+	margin-bottom: 32px;
+}
+
+.sfm-mode-accordion .sfm-category-title {
+	padding: 14px 20px 14px;
+	margin: 0;
+	border-bottom: 2px solid #e8e8e8;
+	border-radius: 0;
+	font-size: 18px;
+	background: #fff;
+}
+
+/* Strip the h3 default styles when it wraps the toggle button */
+.sfm-mode-accordion .sfm-faq-question {
+	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
 /* FAQ groups */
 .sfm-faq-group {
 	margin-bottom: 44px;

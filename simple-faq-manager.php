@@ -3,7 +3,7 @@
  * Plugin Name: Simple FAQ Manager
  * Plugin URI:  https://github.com/example/simple-faq-manager
  * Description: Manage FAQs with categories, drag-and-drop widget ordering, shortcodes, and an Elementor widget.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Simple FAQ Manager
  * License:     GPL-2.0+
  * Text Domain: simple-faq-manager
@@ -13,10 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SFM_VERSION', '1.0.1' );
+define( 'SFM_VERSION', '1.0.2' );
 define( 'SFM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SFM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
+require_once SFM_PLUGIN_DIR . 'includes/settings.php';
 require_once SFM_PLUGIN_DIR . 'includes/admin-widget-faqs.php';
 require_once SFM_PLUGIN_DIR . 'includes/shortcodes.php';
 
@@ -172,6 +173,23 @@ function sfm_register_frontend_assets() {
 		array( 'jquery' ),
 		SFM_VERSION,
 		true
+	);
+
+	// Pass plugin settings to JS (works on both shortcode pages and Elementor pages).
+	$s = sfm_get_settings();
+	wp_localize_script(
+		'sfm-frontend-search',
+		'sfmSettings',
+		array(
+			'listDisplayMode'   => $s['list_display_mode'],
+			'listShowExpandAll' => '1' === $s['list_show_expand_all'],
+			'widgetOpenFirst'   => '1' === $s['widget_open_first'],
+			'widgetExclusive'   => '1' === $s['widget_exclusive'],
+			'i18n'              => array(
+				'expandAll'   => __( 'Expand All', 'simple-faq-manager' ),
+				'collapseAll' => __( 'Collapse All', 'simple-faq-manager' ),
+			),
+		)
 	);
 
 	// Enqueue only on pages that actually use the shortcodes.
