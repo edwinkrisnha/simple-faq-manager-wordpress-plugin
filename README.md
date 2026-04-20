@@ -1,0 +1,110 @@
+# Simple FAQ Manager
+
+A WordPress plugin for managing FAQs with categories, drag-and-drop widget ordering, live search, and an Elementor widget — no external dependencies beyond WordPress core.
+
+## Features
+
+- **Custom Post Type** — FAQs with question (title) and answer (editor)
+- **Taxonomy** — Hierarchical FAQ Categories
+- **Widget FAQs admin page** — Toggle widget visibility and drag-and-drop reorder via AJAX
+- **`[faq_list]` shortcode** — All FAQs grouped by category with real-time search and category filter buttons
+- **`[faq_widget]` shortcode** — Widget-enabled FAQs as a CSS accordion
+- **Elementor Widget** — Drag-and-drop into any Elementor page from the "FAQ" panel category
+
+## Requirements
+
+| Requirement | Version |
+|---|---|
+| WordPress | 6.0+ |
+| PHP | 7.4+ |
+| Elementor *(optional)* | 3.x |
+
+## Installation
+
+1. Copy the `simple-faq-manager` folder into `wp-content/plugins/`.
+2. Activate via **Plugins > Installed Plugins**.
+3. Create FAQs under **FAQs > Add New**.
+4. Visit **FAQs > Widget FAQs** to configure the homepage widget.
+
+## Shortcodes
+
+### `[faq_list]`
+
+Displays all published FAQs grouped by category. Includes:
+
+- Real-time keyword search across questions and answers (JavaScript, no page reload)
+- Category filter buttons
+- All answers expanded by default
+
+### `[faq_widget]`
+
+Displays FAQs marked **Show on Widget**, ordered by the drag-and-drop admin order, as a smooth CSS accordion.
+
+## File Structure
+
+```
+simple-faq-manager/
+├── simple-faq-manager.php       # Main plugin file: CPT, taxonomy, meta, hooks
+├── includes/
+│   ├── admin-widget-faqs.php    # Admin page + AJAX handlers (order & toggle)
+│   ├── shortcodes.php           # [faq_list], [faq_widget], sfm_render_accordion()
+│   └── elementor-widget.php     # Elementor 3.x widget class
+├── assets/
+│   ├── css/
+│   │   ├── admin.css            # Admin toggle switch, drag placeholder, notices
+│   │   └── frontend.css        # FAQ list, accordion, category filters, responsive
+│   └── js/
+│       ├── admin-sortable.js    # jQuery UI Sortable + AJAX toggle
+│       └── frontend-search.js  # Accordion + debounced search + category filter
+├── readme.txt                   # WordPress plugin directory readme
+├── README.md                    # This file
+└── CHANGELOG.md
+```
+
+## Usage
+
+### Admin: Widget FAQs
+
+Go to **FAQs > Widget FAQs** to:
+
+- **Toggle** the switch on any row to include/exclude it from the `[faq_widget]` and Elementor widget.
+- **Drag** rows to set the display order. Changes save automatically via AJAX.
+
+### Elementor
+
+The **FAQ Widget** appears in the **FAQ** category in Elementor's panel. It supports:
+
+- Custom title and HTML tag (H2–H4, p)
+- Title color and typography controls
+
+### Per-FAQ options
+
+Each FAQ edit screen has a **FAQ Widget Options** meta box (sidebar) where you can manually set **Show on Widget** and **Widget Order**.
+
+## Security
+
+- All AJAX actions verified with WordPress nonces (`check_ajax_referer`)
+- Capability check (`manage_options`) on every admin AJAX handler
+- All output escaped with `esc_html`, `esc_attr`, `wp_kses_post`
+- Meta box uses `wp_nonce_field` / `wp_verify_nonce`
+
+## Customisation
+
+All frontend classes are prefixed `sfm-`. Override them in your theme:
+
+```css
+/* Example: change the accordion header accent colour */
+.sfm-accordion-header[aria-expanded="true"] {
+    background: #f5f0ff;
+    color: #6d28d9;
+}
+
+/* Example: change the FAQ list left border */
+.sfm-faq-item {
+    border-left-color: #6d28d9;
+}
+```
+
+## License
+
+GPL-2.0+. See [LICENSE](LICENSE).

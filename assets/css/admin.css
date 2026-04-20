@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Simple FAQ Manager — Admin Styles
+   ========================================================================== */
+
+.sfm-admin-wrap .sfm-faq-table {
+	margin-top: 16px;
+}
+
+/* Drag handle column */
+.sfm-drag-handle {
+	cursor: grab;
+	color: #aaa;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.sfm-drag-handle:active {
+	cursor: grabbing;
+}
+
+.sfm-drag-handle .dashicons {
+	font-size: 20px;
+	line-height: 1.6;
+}
+
+/* Row states during sort */
+.sfm-faq-row.ui-sortable-helper {
+	background: #f0f7fb !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	display: table;
+	width: 100%;
+}
+
+.sfm-sortable-placeholder {
+	visibility: visible !important;
+	background: #e8f3fc !important;
+	border: 2px dashed #2271b1 !important;
+	height: 46px;
+}
+
+/* Toggle switch */
+.sfm-toggle {
+	position: relative;
+	display: inline-block;
+	width: 46px;
+	height: 24px;
+}
+
+.sfm-toggle input {
+	opacity: 0;
+	width: 0;
+	height: 0;
+	position: absolute;
+}
+
+.sfm-toggle-slider {
+	position: absolute;
+	cursor: pointer;
+	inset: 0;
+	background-color: #ccc;
+	border-radius: 24px;
+	transition: background-color 0.25s;
+}
+
+.sfm-toggle-slider::before {
+	content: "";
+	position: absolute;
+	height: 18px;
+	width: 18px;
+	left: 3px;
+	bottom: 3px;
+	background-color: #fff;
+	border-radius: 50%;
+	transition: transform 0.25s;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.sfm-toggle input:checked + .sfm-toggle-slider {
+	background-color: #2271b1;
+}
+
+.sfm-toggle input:focus-visible + .sfm-toggle-slider {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+}
+
+.sfm-toggle input:checked + .sfm-toggle-slider::before {
+	transform: translateX(22px);
+}
+
+/* Save/error notice bar */
+.sfm-save-notice {
+	padding: 10px 16px;
+	margin: 12px 0;
+	border-radius: 4px;
+	font-weight: 500;
+	font-size: 14px;
+}
+
+.sfm-save-notice.success {
+	background: #d1e7dd;
+	border: 1px solid #badbcc;
+	color: #0a3622;
+}
+
+.sfm-save-notice.error {
+	background: #f8d7da;
+	border: 1px solid #f5c2c7;
+	color: #58151c;
+}
