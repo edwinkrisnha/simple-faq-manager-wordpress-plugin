@@ -7,6 +7,22 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ---
 
+## [1.0.7] — 2026-04-20
+
+### Changed
+
+- **Frontend design overhaul** — `frontend.css` fully redesigned:
+  - Search bar is now a full-width pill with an inline SVG search icon and a focus glow ring
+  - Category filter buttons: lighter default state, shadow on active pill
+  - Expanded mode FAQ items: white card with subtle `box-shadow`, hover lift (`translateY(-1px)`)
+  - Category titles: accent left bar via CSS `::before`
+  - Accordion mode (list + widget): card container with rounded corners and shadow; no redundant left border on individual rows
+  - `+`/`×` text icon replaced with a CSS-drawn chevron (`::before` on `.sfm-list-icon` / `.sfm-accordion-icon`), animated via `rotate` on `aria-expanded` state change — no JS change required
+  - Answer panels: cleaner open state with a top separator instead of a colored left border
+  - Consistent 14px `border-radius` on accordion group cards
+
+---
+
 ## [1.0.6] — 2026-04-20
 
 ### Added

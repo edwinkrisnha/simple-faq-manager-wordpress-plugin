@@ -17,94 +17,123 @@
 }
 
 /* --------------------------------------------------------------------------
-   Shared utilities
-   -------------------------------------------------------------------------- */
-
-.sfm-no-faqs {
-	color: #777;
-	font-style: italic;
-}
-
-/* --------------------------------------------------------------------------
-   [faq_list] — Full FAQ page
+   Wrapper
    -------------------------------------------------------------------------- */
 
 .sfm-faq-list-wrap {
-	max-width: 900px;
+	max-width: 860px;
 	margin: 0 auto;
 }
 
-/* Search bar */
+/* --------------------------------------------------------------------------
+   Search bar
+   -------------------------------------------------------------------------- */
+
 .sfm-search-wrap {
-	margin-bottom: 20px;
+	position: relative;
+	margin-bottom: 28px;
+}
+
+.sfm-search-wrap::before {
+	content: '';
+	position: absolute;
+	left: 16px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 18px;
+	height: 18px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23aab' stroke-width='2.2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath stroke-linecap='round' d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+	background-size: contain;
+	background-repeat: no-repeat;
+	pointer-events: none;
 }
 
 .sfm-search-input {
 	width: 100%;
-	max-width: 480px;
-	padding: 10px 16px;
+	max-width: 520px;
+	padding: 11px 18px 11px 46px;
 	font-size: 15px;
 	line-height: 1.5;
-	border: 2px solid #ddd;
-	border-radius: 6px;
+	border: 1.5px solid #e2e8f0;
+	border-radius: 50px;
+	background: #fff;
+	color: var(--sfm-question-text);
 	outline: none;
 	box-sizing: border-box;
-	transition: border-color 0.2s;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+	transition: border-color 0.2s, box-shadow 0.2s;
 	font-family: inherit;
+}
+
+.sfm-search-input::placeholder {
+	color: #aab4be;
 }
 
 .sfm-search-input:focus {
 	border-color: var(--sfm-accent);
+	box-shadow: 0 0 0 3px var(--sfm-accent-bg);
 }
 
-/* Category filter buttons */
+/* --------------------------------------------------------------------------
+   Category filter buttons
+   -------------------------------------------------------------------------- */
+
 .sfm-category-filters {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
-	margin-bottom: 32px;
+	margin-bottom: 36px;
 }
 
 .sfm-cat-btn {
-	padding: 7px 18px;
-	font-size: 14px;
+	padding: 8px 20px;
+	font-size: 13px;
+	font-weight: 500;
 	font-family: inherit;
-	border: 2px solid #ddd;
-	border-radius: 20px;
+	border: 1.5px solid #e2e8f0;
+	border-radius: 50px;
 	background: #fff;
 	cursor: pointer;
-	color: var(--sfm-answer-text);
-	transition: background 0.2s, border-color 0.2s, color 0.2s;
+	color: #64748b;
 	line-height: 1.4;
+	letter-spacing: 0.01em;
+	transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.18s;
 }
 
 .sfm-cat-btn:hover {
 	border-color: var(--sfm-accent);
 	color: var(--sfm-accent);
+	background: var(--sfm-accent-bg);
 }
 
 .sfm-cat-btn.active {
 	background: var(--sfm-accent);
 	border-color: var(--sfm-accent);
 	color: #fff;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
-/* Expand / Collapse All button */
+/* --------------------------------------------------------------------------
+   Expand / Collapse All button
+   -------------------------------------------------------------------------- */
+
 .sfm-expand-controls {
-	margin-bottom: 16px;
+	margin-bottom: 20px;
 	text-align: right;
 }
 
 .sfm-expand-all-btn {
-	padding: 6px 16px;
+	padding: 7px 18px;
 	font-size: 13px;
+	font-weight: 500;
 	font-family: inherit;
-	border: 1px solid var(--sfm-accent);
-	border-radius: 4px;
+	border: 1.5px solid var(--sfm-accent);
+	border-radius: 50px;
 	background: transparent;
 	color: var(--sfm-accent);
 	cursor: pointer;
-	transition: background 0.2s, color 0.2s;
+	letter-spacing: 0.01em;
+	transition: background 0.18s, color 0.18s;
 	line-height: 1.5;
 }
 
@@ -114,41 +143,143 @@
 }
 
 /* --------------------------------------------------------------------------
-   [faq_list] accordion mode
+   Category group + title
    -------------------------------------------------------------------------- */
 
-/* In accordion mode, answers start hidden — JS reveals them via [hidden] removal. */
+.sfm-faq-group {
+	margin-bottom: 48px;
+}
+
+.sfm-category-title {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 18px;
+	font-weight: 700;
+	margin: 0 0 20px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid #edf0f3;
+	color: var(--sfm-question-text);
+}
+
+.sfm-category-title::before {
+	content: '';
+	display: inline-block;
+	width: 4px;
+	height: 20px;
+	background: var(--sfm-accent);
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Expanded mode — FAQ cards
+   -------------------------------------------------------------------------- */
+
+.sfm-faq-item {
+	margin-bottom: 10px;
+	padding: 22px 26px;
+	background: #fff;
+	border-radius: 12px;
+	border-left: 4px solid var(--sfm-accent);
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07), 0 2px 8px rgba(0, 0, 0, 0.04);
+	transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.sfm-faq-item:hover {
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+	transform: translateY(-1px);
+}
+
+.sfm-faq-question {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0 0 10px;
+	color: var(--sfm-question-text);
+	line-height: 1.45;
+}
+
+.sfm-faq-answer {
+	font-size: 15px;
+	line-height: 1.8;
+	color: var(--sfm-answer-text);
+}
+
+.sfm-faq-answer > *:last-child {
+	margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Accordion mode — list
+   -------------------------------------------------------------------------- */
+
+.sfm-mode-accordion .sfm-faq-group {
+	border: 1px solid #e8ecf0;
+	border-radius: 14px;
+	overflow: hidden;
+	margin-bottom: 28px;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.sfm-mode-accordion .sfm-category-title {
+	padding: 16px 24px;
+	margin: 0;
+	font-size: 15px;
+	font-weight: 700;
+	background: var(--sfm-item-bg);
+	border-bottom: 1px solid #e8ecf0;
+	border-radius: 0;
+}
+
+/* Override default border-bottom on category title inside accordion groups */
+.sfm-mode-accordion .sfm-faq-group > .sfm-category-title {
+	border-bottom: 1px solid #e8ecf0;
+	padding-bottom: 16px;
+}
+
 .sfm-mode-accordion .sfm-faq-item {
 	padding: 0;
 	background: transparent;
 	border-left: none;
+	border-radius: 0;
+	box-shadow: none;
+	margin-bottom: 0;
 }
 
-/* The toggle button inside the h3 acts as the accordion trigger */
+.sfm-mode-accordion .sfm-faq-item:hover {
+	transform: none;
+	box-shadow: none;
+}
+
+.sfm-mode-accordion .sfm-faq-question {
+	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+/* Toggle button */
 .sfm-list-toggle {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 12px;
-	padding: 16px 20px;
-	background: var(--sfm-item-bg);
+	gap: 16px;
+	padding: 18px 24px;
+	background: #fff;
 	border: none;
-	border-bottom: 1px solid #e8e8e8;
-	border-left: 4px solid transparent;
-	font-size: 16px;
+	border-bottom: 1px solid #f0f4f8;
+	font-size: 15px;
 	font-weight: 600;
 	font-family: inherit;
 	text-align: left;
 	cursor: pointer;
 	color: var(--sfm-question-text);
-	transition: background 0.2s, border-color 0.2s, color 0.2s;
-	line-height: 1.4;
+	transition: background 0.18s, color 0.18s;
+	line-height: 1.5;
 }
 
 .sfm-list-toggle:hover {
 	background: var(--sfm-accent-bg);
-	border-left-color: var(--sfm-accent);
 	color: var(--sfm-accent);
 }
 
@@ -159,31 +290,44 @@
 
 .sfm-list-toggle[aria-expanded="true"] {
 	background: var(--sfm-accent-bg);
-	border-left-color: var(--sfm-accent);
-	color: var(--sfm-accent-dark);
+	color: var(--sfm-accent);
+	border-bottom-color: transparent;
 }
 
+/* Chevron icon */
 .sfm-list-icon {
 	flex-shrink: 0;
-	font-size: 22px;
-	font-weight: 300;
-	line-height: 1;
+	width: 24px;
+	height: 24px;
+	font-size: 0;
+	position: relative;
+}
+
+.sfm-list-icon::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 8px;
+	height: 8px;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: translate(-60%, -70%) rotate(45deg);
 	transition: transform 0.25s ease;
 }
 
-.sfm-list-toggle[aria-expanded="true"] .sfm-list-icon {
-	transform: rotate(45deg);
+.sfm-list-toggle[aria-expanded="true"] .sfm-list-icon::before {
+	transform: translate(-50%, -30%) rotate(-135deg);
 }
 
-/* Answer panel in accordion mode */
+/* Answer panel */
 .sfm-mode-accordion .sfm-faq-item .sfm-faq-answer {
-	padding: 0 20px;
+	padding: 0 24px;
 	font-size: 15px;
-	line-height: 1.75;
+	line-height: 1.8;
 	color: var(--sfm-answer-text);
-	background: var(--sfm-answer-bg);
-	border-left: 4px solid var(--sfm-accent);
-	border-bottom: 1px solid #e8e8e8;
+	background: #fff;
+	border-bottom: 1px solid #f0f4f8;
 	overflow: hidden;
 	max-height: 0;
 	transition: max-height 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
@@ -191,94 +335,30 @@
 
 .sfm-mode-accordion .sfm-faq-item .sfm-faq-answer:not([hidden]) {
 	max-height: 2000px;
-	padding: 16px 20px 20px;
-}
-
-/* Remove margin in accordion mode — spacing comes from borders */
-.sfm-mode-accordion .sfm-faq-item {
-	margin-bottom: 0;
-}
-
-.sfm-mode-accordion .sfm-faq-group {
-	border: 1px solid #e8e8e8;
-	border-radius: 8px;
-	overflow: hidden;
-	margin-bottom: 32px;
-}
-
-.sfm-mode-accordion .sfm-category-title {
-	padding: 14px 20px 14px;
-	margin: 0;
-	border-bottom: 2px solid #e8e8e8;
-	border-radius: 0;
-	font-size: 18px;
-	background: #fff;
-}
-
-/* Strip the h3 default styles when it wraps the toggle button */
-.sfm-mode-accordion .sfm-faq-question {
-	margin: 0;
-	font-size: inherit;
-	font-weight: inherit;
-}
-
-/* FAQ groups */
-.sfm-faq-group {
-	margin-bottom: 44px;
-}
-
-.sfm-category-title {
-	font-size: 22px;
-	font-weight: 700;
-	margin: 0 0 18px;
-	padding-bottom: 10px;
-	border-bottom: 2px solid #e8e8e8;
-	color: var(--sfm-question-text);
-}
-
-/* Individual FAQ item */
-.sfm-faq-item {
-	margin-bottom: 20px;
-	padding: 20px 24px;
-	background: var(--sfm-item-bg);
-	border-radius: 8px;
-	border-left: 4px solid var(--sfm-accent);
-}
-
-.sfm-faq-question {
-	font-size: 17px;
-	font-weight: 600;
-	margin: 0 0 10px;
-	color: var(--sfm-question-text);
-	line-height: 1.4;
-}
-
-.sfm-faq-answer {
-	font-size: 15px;
-	line-height: 1.75;
-	color: var(--sfm-answer-text);
-}
-
-.sfm-faq-answer > *:last-child {
-	margin-bottom: 0;
+	padding: 18px 24px 22px;
 }
 
 /* "No results" message */
 .sfm-no-results {
 	text-align: center;
-	color: #888;
-	padding: 48px 0;
+	color: #94a3b8;
+	padding: 56px 0;
 	font-size: 16px;
 }
 
-/* Hidden items (JS-driven search / category filter) */
+/* Hidden items (search / category filter) */
 .sfm-faq-item.sfm-hidden,
 .sfm-faq-group.sfm-hidden {
 	display: none;
 }
 
+.sfm-no-faqs {
+	color: #94a3b8;
+	font-style: italic;
+}
+
 /* --------------------------------------------------------------------------
-   [faq_widget] — Accordion (also used by Elementor widget)
+   [faq_widget] & Elementor widget — Accordion
    -------------------------------------------------------------------------- */
 
 .sfm-faq-widget-wrap {
@@ -287,34 +367,33 @@
 }
 
 .sfm-widget-title {
-	font-size: 24px;
+	font-size: 22px;
 	font-weight: 700;
 	margin-bottom: 20px;
 	color: var(--sfm-question-text);
 }
 
-/* Accordion container */
 .sfm-accordion {
-	border: 1px solid #e0e0e0;
-	border-radius: 8px;
+	border: 1px solid #e8ecf0;
+	border-radius: 14px;
 	overflow: hidden;
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 .sfm-accordion-item {
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid #f0f4f8;
 }
 
 .sfm-accordion-item:last-child {
 	border-bottom: none;
 }
 
-/* Accordion header button */
 .sfm-accordion-header {
 	width: 100%;
 	background: #fff;
 	border: none;
-	padding: 18px 22px;
-	font-size: 16px;
+	padding: 18px 24px;
+	font-size: 15px;
 	font-weight: 600;
 	font-family: inherit;
 	text-align: left;
@@ -322,14 +401,15 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 14px;
+	gap: 16px;
 	color: var(--sfm-question-text);
-	transition: background 0.2s;
-	line-height: 1.4;
+	transition: background 0.18s, color 0.18s;
+	line-height: 1.5;
 }
 
 .sfm-accordion-header:hover {
-	background: #f5f5f5;
+	background: var(--sfm-accent-bg);
+	color: var(--sfm-accent);
 }
 
 .sfm-accordion-header:focus-visible {
@@ -339,38 +419,51 @@
 
 .sfm-accordion-header[aria-expanded="true"] {
 	background: var(--sfm-accent-bg);
-	color: var(--sfm-accent-dark);
+	color: var(--sfm-accent);
 }
 
-/* +/× icon */
+/* Chevron icon */
 .sfm-accordion-icon {
 	flex-shrink: 0;
-	font-size: 24px;
-	font-weight: 300;
-	line-height: 1;
+	width: 24px;
+	height: 24px;
+	font-size: 0;
+	position: relative;
+}
+
+.sfm-accordion-icon::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 8px;
+	height: 8px;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: translate(-60%, -70%) rotate(45deg);
 	transition: transform 0.25s ease;
 }
 
-.sfm-accordion-header[aria-expanded="true"] .sfm-accordion-icon {
-	transform: rotate(45deg);
+.sfm-accordion-header[aria-expanded="true"] .sfm-accordion-icon::before {
+	transform: translate(-50%, -30%) rotate(-135deg);
 }
 
-/* Accordion body — CSS-driven slide via max-height */
 .sfm-accordion-body {
 	font-size: 15px;
-	line-height: 1.75;
+	line-height: 1.8;
 	color: var(--sfm-answer-text);
-	background: var(--sfm-answer-bg);
+	background: #fff;
 	overflow: hidden;
 	max-height: 0;
-	padding: 0 22px;
+	padding: 0 24px;
+	border-top: 1px solid transparent;
 	transition: max-height 0.3s ease, padding-top 0.3s ease, padding-bottom 0.3s ease;
 }
 
-/* When not [hidden] — JS removes the hidden attr to open */
 .sfm-accordion-body:not([hidden]) {
 	max-height: 2000px;
-	padding: 18px 22px 22px;
+	padding: 18px 24px 22px;
+	border-top-color: #f0f4f8;
 }
 
 .sfm-accordion-body > *:last-child {
@@ -383,19 +476,25 @@
 
 @media (max-width: 600px) {
 	.sfm-faq-item {
-		padding: 16px;
+		padding: 18px 18px;
 	}
 
+	.sfm-list-toggle,
 	.sfm-accordion-header {
-		padding: 14px 16px;
-		font-size: 15px;
+		padding: 15px 18px;
+		font-size: 14px;
 	}
 
+	.sfm-mode-accordion .sfm-faq-item .sfm-faq-answer:not([hidden]),
 	.sfm-accordion-body:not([hidden]) {
-		padding: 14px 16px 18px;
+		padding: 14px 18px 18px;
 	}
 
 	.sfm-category-title {
-		font-size: 19px;
+		font-size: 16px;
+	}
+
+	.sfm-mode-accordion .sfm-category-title {
+		padding: 14px 18px;
 	}
 }
